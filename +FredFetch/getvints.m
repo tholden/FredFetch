@@ -1,5 +1,5 @@
 function [vints] = getvints(series)
 
-  vints = fred.dispatch_(0, 0, @fred.getvints_, series);
+  vints = FredFetch.dispatch_(0, 0, @FredFetch.getvints_, series);
 
 end

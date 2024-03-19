@@ -10,7 +10,7 @@ function [dataByVint] = reshapeByVint(individualBySeries)
 % datasets* in each element of the returned structure array, which is
 % maybe more useful than one series per element.
 
-  opt = fred.GlobalOptions();
+  opt = FredFetch.GlobalOptions();
 
   % Make sure the individualbyseries argument is an array structure; if
   % it's a cell of structs, stack them
@@ -63,7 +63,7 @@ function [dataByVint] = reshapeByVint(individualBySeries)
 
     % Trim the leading and trailing nans
     if opt.trimLeadTrailNaN
-      [toStore.value, rem] = fred.RemLeadTrailNaN_(toStore.value, 'all');
+      [toStore.value, rem] = FredFetch.RemLeadTrailNaN_(toStore.value, 'all');
       toStore.date = toStore.date(~rem);
     end
 

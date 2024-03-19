@@ -8,8 +8,8 @@ function [data] = transform(data, tf, frequency)
 
   %% Handle the different types of data structures that might come in
 
-  % If data is a struct that would come out of calls to fred.latest or
-  % fred.vint
+  % If data is a struct that would come out of calls to FredFetch.latest or
+  % FredFetch.vint
   if isstruct(data)
 
     % If multiple series stacked in an array struct.  Each element of
@@ -18,8 +18,8 @@ function [data] = transform(data, tf, frequency)
     % series at different vintage dates).
     %
     % This if block operates on what you get back from calls to
-    % fred.vint with multiple series *and* vintages or calls fred.vint
-    % and fred.latest with toDatasetByVint = 0.
+    % FredFetch.vint with multiple series *and* vintages or calls FredFetch.vint
+    % and FredFetch.latest with toDatasetByVint = 0.
     if length(data) > 1
 
       Nseries = length(data);
@@ -28,7 +28,7 @@ function [data] = transform(data, tf, frequency)
       trivial   = strcmp(fromUnits, toUnits);
       for n = 1:Nseries
         if ~trivial && strcmp(fromUnits, 'lin')
-          [data(n).value, valid] = fred.transform_(data(n).value, toUnits, data(n).frequency);
+          [data(n).value, valid] = FredFetch.transform_(data(n).value, toUnits, data(n).frequency);
           if valid
             data(n).units = toUnits;
           end
@@ -40,7 +40,7 @@ function [data] = transform(data, tf, frequency)
 
     % data.value is same series over multiple vintage dates in the cols
     elseif ischar(data.series)
-      [data.value, valid] = fred.transform_(data.value, tf{:}, data.frequency);
+      [data.value, valid] = FredFetch.transform_(data.value, tf{:}, data.frequency);
       if valid
         data.units = tf{:};
       end
@@ -59,7 +59,7 @@ function [data] = transform(data, tf, frequency)
         % Only transform if going from lin to a pct change or diff
         if ~trivial && strcmp(fromUnits, 'lin')
           notNaN = ~isnan(data.value(:,n));
-          [data.value(notNaN,n), valid] = fred.transform_(data.value(notNaN,n), toUnits, data.frequency{n});
+          [data.value(notNaN,n), valid] = FredFetch.transform_(data.value(notNaN,n), toUnits, data.frequency{n});
 
           if valid
             data.units{n} = toUnits;
@@ -75,7 +75,7 @@ function [data] = transform(data, tf, frequency)
 
     Nseries = size(data,2);
     for n = 1:Nseries
-      data(:,n) = fred.transform_(data(:,n), tf{n}, frequency{n});
+      data(:,n) = FredFetch.transform_(data(:,n), tf{n}, frequency{n});
     end
 
 

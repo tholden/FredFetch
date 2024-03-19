@@ -52,7 +52,7 @@ function [data] = multipleSeries_(toDatasetByVint, parworkers, dl_fcn, series, v
     else
 
       fprintf('Reshaping by vintage...\n')
-      data = fred.reshapeByVint(individual);
+      data = FredFetch.reshapeByVint(individual);
     end
 
 

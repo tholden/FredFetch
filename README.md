@@ -15,7 +15,7 @@ Three steps:
 <ol type="1">
 <li>Clone this repo somewhere, and add that somewhere to your Matlab path.</li>
 <li> Supply an API key in a file named <code>api.txt</code> in the top-level directory (the one <code>README.md</code> lives in). See the <a href="http://api.stlouisfed.org/api_key.html" target="_blank">Fred website</a> to get one.</li>
-<li>As this is a Matlab package, call functions with a <code>fred.</code> prefix.  Example <code>fred.latest('GDPC1')</code></li>
+<li>As this is a Matlab package, call functions with a <code>FredFetch.</code> prefix.  Example <code>FredFetch.latest('GDPC1')</code></li>
 </ol>
 
 
@@ -23,8 +23,8 @@ Three steps:
 
 You really only need to interact with two functions:
 
-1. `fred.latest(series)`: For fetching the latest data.
-2. `fred.vint(series, vint)`: For fetching data as it existed at some vintage date.
+1. `FredFetch.latest(series)`: For fetching the latest data.
+2. `FredFetch.vint(series, vint)`: For fetching data as it existed at some vintage date.
 
 Where `series` is a Fred series code (or cell of codes), and `vint` is a
 Matlab datenum or array of datenums (or, alternatively, cell and cell
@@ -44,7 +44,7 @@ Calls to these functions return structs with the following fields:
 
 All series are returned in the native Fred units (so often levels, not
 percent changes, or differences). If you need to transform the data, see
-the function `fred.transform`.
+the function `FredFetch.transform`.
 
 
 ### Fetching the Latest Data
@@ -52,19 +52,19 @@ the function `fred.transform`.
 This is the simplest case, when you want to quickly import into Matlab
 the latest data for one or many series. Examples:
 
-- `fred.latest('GDPC1')`: Fetch the series GDPC1.
-- `fred.latest({'GDPC1', 'PAYEMS', 'NAPM'})`: Fetch multiple series at
+- `FredFetch.latest('GDPC1')`: Fetch the series GDPC1.
+- `FredFetch.latest({'GDPC1', 'PAYEMS', 'NAPM'})`: Fetch multiple series at
   once, including data with different frequencies. The returned data
   will be merged into a single data matrix (aligned and accounting for
   different frequencies).
-- `fred.latest({'GDPC1', 'PAYEMS', 'NAPM'}, 0)`: Same as above, but
+- `FredFetch.latest({'GDPC1', 'PAYEMS', 'NAPM'}, 0)`: Same as above, but
   returns a struture array, with one entry per series. Does _not_ merge data into common data matrix.
 
-The real advantage of `fred.latest` is that it's snappy. Though you
+The real advantage of `FredFetch.latest` is that it's snappy. Though you
 could download these data using the vintage functions below (with the
 vintage date simply set to today's date), the returned json results from
 the Fred API need to be parsed, which is slower. Not terribly slow, but
-`fred.latest` is on the order of a second (or less) per series, so it's
+`FredFetch.latest` is on the order of a second (or less) per series, so it's
 preferred.
 
 
@@ -74,16 +74,16 @@ preferred.
 
 To fetch the data that would have existed at a certain date, run
 
-- `fred.vint('GDPC1', '2001-01-01')`: Fetch series as it existed
+- `FredFetch.vint('GDPC1', '2001-01-01')`: Fetch series as it existed
   01-Jan-2001.
-- `fred.vint({'GDPC1', 'PAYEMS', 'NAPM'}, '2001-01-01')`: Fetch multiple series.
-- `fred.vint({'GDPC1', 'PAYEMS', 'NAPM'}, '2001-01-01', 0)`: Fetch
+- `FredFetch.vint({'GDPC1', 'PAYEMS', 'NAPM'}, '2001-01-01')`: Fetch multiple series.
+- `FredFetch.vint({'GDPC1', 'PAYEMS', 'NAPM'}, '2001-01-01', 0)`: Fetch
   multiple series, but don't merge into common matrix.
-- `fred.vint('GDPC1', datenum(2000:2015,1,1))`: Get series at
+- `FredFetch.vint('GDPC1', datenum(2000:2015,1,1))`: Get series at
   January 1 of every year from 2000 to 2015.
-- `fred.vint({'GDPC1', 'PAYEMS', 'NAPM'}, datenum(2000:2015,1,1))`: Get
+- `FredFetch.vint({'GDPC1', 'PAYEMS', 'NAPM'}, datenum(2000:2015,1,1))`: Get
   multiple series at January 1 of every year from 2000 to 2015.
-- `fred.vintall('GDPC1')`: All available vintages of a given series.
+- `FredFetch.vintall('GDPC1')`: All available vintages of a given series.
   Observation dates along the rows, unique vintage dates along the
   columns of returned data matrix.
 
@@ -109,7 +109,7 @@ publication lags, constructing an information set close to what you
 To do this, simply run
 
 ```
-  `fred.vint('GDPC1', '1989-01-01', 'pseudo', 1)
+  `FredFetch.vint('GDPC1', '1989-01-01', 'pseudo', 1)
 ```
 
 This package will do exactly the method described above, using the
@@ -120,13 +120,13 @@ the series) to discard observations.
 
 When downloading vintages for many, many series, you might want to
 download in parallel. (The json parsing is the bottleneck, so if you're
-just running `fred.latest`, which doesn't use json, you problably don't
+just running `FredFetch.latest`, which doesn't use json, you problably don't
 need to worry about parallelizing, though you could.)
 
 To do this, simply add the following argument
 
 ```
-  `fred.vint({'GDPC1', 'NAPM', 'PAYEMS'}, '1989-01-01', 'parworkers', Nworkers)
+  `FredFetch.vint({'GDPC1', 'NAPM', 'PAYEMS'}, '1989-01-01', 'parworkers', Nworkers)
 ```
 
 where `Nworkers` is the number of parallel workers you would like to
@@ -142,11 +142,11 @@ should come last in the argument list.
 
 Here are some examples for the remaining user-oriented functions:
 
-- `fred.firstRelease('GDPC1')`: For all observation dates of `GDPC1`,
+- `FredFetch.firstRelease('GDPC1')`: For all observation dates of `GDPC1`,
   return the first release (rather than subsequent revisions or the
   latest value).
-- `fred.firstRelease('GDPC1', 'units', 'pca')`: First releases of GDPC1
-  in percent-annualized units. Transformation done by `fred.transform`
+- `FredFetch.firstRelease('GDPC1', 'units', 'pca')`: First releases of GDPC1
+  in percent-annualized units. Transformation done by `FredFetch.transform`
   (since passing this to the Fred API does not work, for some reason).
 - `getvints('GDPC1')`: Return available vintage dates for `GDPC1`.
 - `transform(X, tform, frqcy)`: Transform a series, where `tform` is a
@@ -154,7 +154,7 @@ Here are some examples for the remaining user-oriented functions:
   `X` is a matrix of data, `tform` and `frqcy` should be cell arrays,
   one entry for each column of `X`.
 - `transform(dataStruct, transform)`: For transforming data within a
-  structure returned by `fred.vint` or `fred.latest`. Again, multiple
+  structure returned by `FredFetch.vint` or `FredFetch.latest`. Again, multiple
   series require that `transform` be a cell of transformation strings.
 
 The remaining non-user oriented functions have names ending with an
@@ -173,7 +173,7 @@ wrapper for the fully-featured Fred API.
 Example:
 
 ```
-  fred.vint('GDPC1', '2001-01-01', 'observation_start', '1991-03-14', 'observation_end', '2000-03-14')
+  FredFetch.vint('GDPC1', '2001-01-01', 'observation_start', '1991-03-14', 'observation_end', '2000-03-14')
 ```
 
 Again, you can supply any number of additional Fred API that arguments you want,

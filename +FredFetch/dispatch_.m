@@ -7,7 +7,7 @@ function [vintdata] = dispatch_(toDatasetByVint, parworkers, fcn, series, vararg
   if isstr(series)
     vintdata = feval(fcn, series, varargin{:});
   else
-    vintdata = fred.multipleSeries_(toDatasetByVint, parworkers, fcn, series, varargin{:});
+    vintdata = FredFetch.multipleSeries_(toDatasetByVint, parworkers, fcn, series, varargin{:});
   end
 
 

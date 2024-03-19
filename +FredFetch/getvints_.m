@@ -1,7 +1,7 @@
 function [returned] = getvints_(series, max_attempt)
 
   %% Options
-  opt = fred.GlobalOptions();
+  opt = FredFetch.GlobalOptions();
   if ~exist('max_attempt', 'var')
     max_attempt = opt.max_attempt;
   end
@@ -18,12 +18,12 @@ function [returned] = getvints_(series, max_attempt)
   try
     vintdates = jsonlab.loadjson(urlread(url));
     returned.series    = series;
-    returned.vintdates = fred.dtnum(vintdates.vintage_dates,1)';
+    returned.vintdates = FredFetch.dtnum(vintdates.vintage_dates,1)';
     returned.success   = 1;
   catch
     if max_attempt - 1
       pause(5);
-      returned = fred.getvints_(series, max_attempt-1);
+      returned = FredFetch.getvints_(series, max_attempt-1);
       return
     else
       returned.series    = series;

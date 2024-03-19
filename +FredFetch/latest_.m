@@ -1,7 +1,7 @@
 function [data] = latest_(series)
 
   url = sprintf('https://research.stlouisfed.org/fred2/data/%s.txt', upper(series));
-  [query, success] = fred.ReadFredURL_(url, 0);
+  [query, success] = FredFetch.ReadFredURL_(url, 0);
   if ~success
     data.info      = query;
     data.series    = series;
@@ -54,8 +54,8 @@ function [data] = latest_(series)
   data.frequency = info.frequency_short;
   data.units     = 'lin';
   data.pseudo    = NaN;
-  data.realtime  = fred.dtnum(datestr(date(), 'yyyy-mm-dd'), 1);
-  data.date      = fred.dtnum(date_value{1}, 1);
+  data.realtime  = FredFetch.dtnum(datestr(date(), 'yyyy-mm-dd'), 1);
+  data.date      = FredFetch.dtnum(date_value{1}, 1);
   data.value     = str2double(date_value{2});
 
 

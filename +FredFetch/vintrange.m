@@ -6,15 +6,15 @@ function [vintdata] = vintrange(series, realtime_start, realtime_end, varargin)
   % lower frequency or change the units. So we want strip those out of
   % the optional args we pass to the fred api and handle them ourselves
   % below
-  [opt, toPass] = fred.parseVarargin_({'frequency', 'units'}, varargin{:});
+  [opt, toPass] = FredFetch.parseVarargin_({'frequency', 'units'}, varargin{:});
 
   series = upper(series);
-  realtime_start = fred.dtstr(realtime_start);
-  realtime_end   = fred.dtstr(realtime_end);
+  realtime_start = FredFetch.dtstr(realtime_start);
+  realtime_end   = FredFetch.dtstr(realtime_end);
 
   %% Try to grab the data
   fprintf('Downloading %s...\n', series);
-  [query, success] = fred.ReadFredData_('series_id', series, 'realtime_start', realtime_start, 'realtime_end', realtime_end, toPass{:});
+  [query, success] = FredFetch.ReadFredData_('series_id', series, 'realtime_start', realtime_start, 'realtime_end', realtime_end, toPass{:});
 
   %% Return on errors
   if ~success
@@ -42,7 +42,7 @@ function [vintdata] = vintrange(series, realtime_start, realtime_end, varargin)
   isdt = [1 1 1 0];
   for n = 1:length(flds)
     if isdt(n)
-      all.(flds{n}) = fred.dtnum({obs(:).(flds{n})}',1);
+      all.(flds{n}) = FredFetch.dtnum({obs(:).(flds{n})}',1);
       unq.(flds{n}) = unique(all.(flds{n}));
     else
       all.(flds{n}) = arrayfun(@(t) str2double(obs(t).(flds{n})), 1:Nall)';
@@ -109,7 +109,7 @@ function [vintdata] = vintrange(series, realtime_start, realtime_end, varargin)
 
     % Transform the data if the user wanted to
     if opt.units
-      vintdata = fred.transform(vintdata, opt.units);
+      vintdata = FredFetch.transform(vintdata, opt.units);
     end
 
 end

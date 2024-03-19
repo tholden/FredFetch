@@ -1,12 +1,12 @@
 function [returned] = vintsFromAll_(series, vintdates, pseudo, varargin)
 
   % Convert all vintage dates to datenums
-  vintdates = fred.dtnum(vintdates,1);
+  vintdates = FredFetch.dtnum(vintdates,1);
 
   % If pseudo specified and you don't actually need a pseudo vintage (bc
   % a vintage is available), turn it off
   if pseudo
-    available = fred.getvints(series);
+    available = FredFetch.getvints(series);
     if available.success && vintdates(1) >= available.vintdates(1)
       pseudo = 0;
     end
@@ -21,7 +21,7 @@ function [returned] = vintsFromAll_(series, vintdates, pseudo, varargin)
       start = vintdates(1);
       stop  = vintdates(end);
     end
-    vintall = fred.vintrange(series, start, stop, varargin{:});
+    vintall = FredFetch.vintrange(series, start, stop, varargin{:});
 
 
   %% If didn't download correctly quit
@@ -35,7 +35,7 @@ function [returned] = vintsFromAll_(series, vintdates, pseudo, varargin)
 
     % Get publication lags for pseudo vintage
     if pseudo
-      publag = fred.computePublag_(vintall.date, vintall.realtime, vintall.value);
+      publag = FredFetch.computePublag_(vintall.date, vintall.realtime, vintall.value);
     end
 
     % Select data column for each given vintage date from the matrix of
@@ -68,7 +68,7 @@ function [returned] = vintsFromAll_(series, vintdates, pseudo, varargin)
   %% Chop off trailing nan rows, which arise for pseudo vintages
 
   if pseudo
-    [returned.value, trailNaNRows] = fred.RemLeadTrailNaN_(returned.value, 'trail');
+    [returned.value, trailNaNRows] = FredFetch.RemLeadTrailNaN_(returned.value, 'trail');
     returned.date(find(trailNaNRows)) = [];
   end
 

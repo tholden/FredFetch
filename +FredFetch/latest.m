@@ -1,11 +1,11 @@
 function [data] = latest(series, varargin)
 
-  opt = fred.parseVarargin_({'parworkers', 'pseudo', 'units'}, varargin{:});
-  data = fred.dispatch_(opt.toDatasetByVint, opt.parworkers, @fred.latest_, series);
+  opt = FredFetch.parseVarargin_({'parworkers', 'pseudo', 'units'}, varargin{:});
+  data = FredFetch.dispatch_(opt.toDatasetByVint, opt.parworkers, @FredFetch.latest_, series);
 
   % Maybe transform
   if iscell(opt.units) | ischar(opt.units)
-    data = fred.transform(data, opt.units);
+    data = FredFetch.transform(data, opt.units);
   end
 
 end

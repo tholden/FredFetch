@@ -10,14 +10,14 @@ function [returned] = releaseDates_(input)
 
     % It's a series name; get the release id number
     if ischar(input)
-      release_id = fred.releaseID_(input);
+      release_id = FredFetch.releaseID_(input);
     else
       release_id = input;
     end
 
   %% Download the release dates for that release ID
 
-    opt = fred.GlobalOptions();
+    opt = FredFetch.GlobalOptions();
     datesURL = sprintf([...
             'https://api.stlouisfed.org/fred/release/dates?' ...
             'release_id=%d' ...
@@ -26,11 +26,11 @@ function [returned] = releaseDates_(input)
             '&file_type=json'],...
             release_id, ...
             opt.api);
-    fromFred = fred.ReadFredURL_(datesURL, 1, opt.max_attempt);
-    fromFred = [fromFred.release_dates{:}];
+    fromFred = FredFetch.ReadFredURL_(datesURL, 1, opt.max_attempt);
+    fromFred = [fromFredFetch.release_dates{:}];
 
 
     returned.release_id = release_id;
-    returned.date       = fred.dtnum({fromFred.date}, 1)';
+    returned.date       = FredFetch.dtnum({fromFredFetch.date}, 1)';
 
 end

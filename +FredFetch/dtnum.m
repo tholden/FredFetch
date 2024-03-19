@@ -1,6 +1,6 @@
 function [outdate] = dtnum(indate, fred_fmt)
-% FRED.DTNUM datenum for arguments of type char or cell
-%  OUTDATE = FRED.DTNUM(INDATE) returns datenum(s) for each date in INDATE.
+% FredFetch.DTNUM datenum for arguments of type char or cell
+%  OUTDATE = FredFetch.DTNUM(INDATE) returns datenum(s) for each date in INDATE.
 
   if exist('fred_fmt', 'var') && fred_fmt
     fmt = {'yyyy-mm-dd'};

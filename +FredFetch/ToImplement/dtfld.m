@@ -10,7 +10,7 @@ function [varargout] = dtfld(dt, fld)
     varargout{1} = str2num(q(:,2));
 
   case {'week', 'day'}
-    firstInYear = datenum(fred.dtfld(dt, 'year'), 1, 1);
+    firstInYear = datenum(FredFetch.dtfld(dt, 'year'), 1, 1);
     varargout{1} = str2num(q(:,2));
   end
 

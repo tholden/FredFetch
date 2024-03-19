@@ -24,10 +24,10 @@
 %
 function [vintdata] = vint(series, vint_date, varargin)
 
-  [opt, toPass] = fred.parseVarargin_({'pseudo', 'parworkers'}, varargin{:});
+  [opt, toPass] = FredFetch.parseVarargin_({'pseudo', 'parworkers'}, varargin{:});
 
   % Make vint dates a datenum and sort
-  vint_date = sort(fred.dtnum(vint_date));
+  vint_date = sort(FredFetch.dtnum(vint_date));
   if any(vint_date < datenum(1991,1,1)) && ~opt.pseudo
     warning('Early vintage date; data might not exist for some or all series.')
   end
@@ -35,9 +35,9 @@ function [vintdata] = vint(series, vint_date, varargin)
   % Call to different functions depending upon whether one or multiple
   % vint dates are specified
   if length(vint_date) > 1
-    vintdata = fred.dispatch_(opt.toDatasetByVint, opt.parworkers, @fred.vintsFromAll_, series, vint_date, opt.pseudo, toPass{:});
+    vintdata = FredFetch.dispatch_(opt.toDatasetByVint, opt.parworkers, @FredFetch.vintsFromAll_, series, vint_date, opt.pseudo, toPass{:});
   else
-    vintdata = fred.dispatch_(opt.toDatasetByVint, opt.parworkers, @fred.vint_, series, vint_date, opt.pseudo, toPass{:});
+    vintdata = FredFetch.dispatch_(opt.toDatasetByVint, opt.parworkers, @FredFetch.vint_, series, vint_date, opt.pseudo, toPass{:});
   end
 
 

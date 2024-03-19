@@ -1,7 +1,7 @@
 function [url] = MakeFredURL_(urltype, varargin)
 
   %% Get global options
-  opt = fred.GlobalOptions();
+  opt = FredFetch.GlobalOptions();
 
   %% Start of URL
   %  This is specific to the type of pull you want to
@@ -28,7 +28,7 @@ function [url] = MakeFredURL_(urltype, varargin)
 
     % If a datefield is a datenum, convert to Fred format
     if any(strcmp(date_flds, varargin{a})) && isnumeric(varargin{a+1})
-      varargin{a+1} = fred.dtstr(varargin{a+1});
+      varargin{a+1} = FredFetch.dtstr(varargin{a+1});
     end
 
     url = sprintf('%s&%s=%s', url, varargin{a}, varargin{a+1});

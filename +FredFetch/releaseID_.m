@@ -1,8 +1,8 @@
 function [returned] = releaseID_(series, parworkers)
-% [release_id] = fred.releaseID_(series) will return the FRED release ID
+% [release_id] = FredFetch.releaseID_(series) will return the FRED release ID
 % number for a given series.
 
-  opt = fred.GlobalOptions();
+  opt = FredFetch.GlobalOptions();
   releaseURL = sprintf([...
           'https://api.stlouisfed.org/fred/series/release?' ...
           'series_id=%s' ...
@@ -14,10 +14,10 @@ function [returned] = releaseID_(series, parworkers)
           opt.api);
 
   % Download
-  fromFred = fred.ReadFredURL_(releaseURL, 1, opt.max_attempt);
+  fromFred = FredFetch.ReadFredURL_(releaseURL, 1, opt.max_attempt);
 
   % Extract
-  release_id = unique(cellfun(@(d) d.id, fromFred.releases));;
+  release_id = unique(cellfun(@(d) d.id, fromFredFetch.releases));;
 
   % Make sure there's only one release ID for that series (seems like
   % there should be, but we check for that just in case)
@@ -27,7 +27,7 @@ function [returned] = releaseID_(series, parworkers)
 
   returned.series       = series;
   returned.release_id   = release_id;
-  returned.release_name = fromFred.releases{end}.name;
-  returned.release_link = fromFred.releases{end}.link;
+  returned.release_name = fromFredFetch.releases{end}.name;
+  returned.release_link = fromFredFetch.releases{end}.link;
 
 end

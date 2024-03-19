@@ -5,10 +5,10 @@ function [X, valid] = transform_(X, tf, frequency)
 % [X, valid] = transform_(X, TF, FREQUENCY) transforms vector X (or all
 % columns of matrix X) into units specified by tf. Assumes matrix X is
 % all the same frequency of data (no irregular spacing, like you might
-% get from fred.vint or fred.latest).
+% get from FredFetch.vint or FredFetch.latest).
 %
 % To transform a matrix with different frequencies of data or to apply
-% different transformations to different columns, see fred.transform (no
+% different transformations to different columns, see FredFetch.transform (no
 % underscore), which is a more general wrapper for this function.
 
 

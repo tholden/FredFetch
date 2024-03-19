@@ -15,7 +15,7 @@ function [returned, success] = ReadFredURL_(url, json, max_attempt)
 
   %% Get max attempt if not set
   if ~exist('max_attempt', 'var')
-    opt = fred.GlobalOptions();
+    opt = FredFetch.GlobalOptions();
     max_attempt = opt.max_attempt;
   end
 
@@ -29,7 +29,7 @@ function [returned, success] = ReadFredURL_(url, json, max_attempt)
     success  = 1;
   catch
     if max_attempt - 1
-      [returned, success] = fred.ReadFredURL_(url, json, max_attempt-1);
+      [returned, success] = FredFetch.ReadFredURL_(url, json, max_attempt-1);
       return
     else
       returned = lasterror();

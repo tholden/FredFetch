@@ -4,7 +4,7 @@ function [rlsdata] = firstRelease_(series, varargin)
 
     % If 'units' is in the varargin, take that out and handle later bc
     % there are issues pulling that from FRED
-    [opt, toPass] = fred.parseVarargin_({'units'}, varargin{:});
+    [opt, toPass] = FredFetch.parseVarargin_({'units'}, varargin{:});
     if isnumeric(opt.units) && ~opt.units
       units = 'lin';
     else
@@ -15,7 +15,7 @@ function [rlsdata] = firstRelease_(series, varargin)
     end
 
     % Download
-    vintdata = fred.vintall(series, toPass{:});
+    vintdata = FredFetch.vintall(series, toPass{:});
 
     % Handle errors
     if isempty(vintdata.value)
@@ -31,7 +31,7 @@ function [rlsdata] = firstRelease_(series, varargin)
 
     % Transform
     Nvint = length(vintdata.realtime);
-    [vintdata.value, tfValid] = fred.transform_(vintdata.value, units, vintdata.info(end).frequency_short);
+    [vintdata.value, tfValid] = FredFetch.transform_(vintdata.value, units, vintdata.info(end).frequency_short);
 
   %% Replace all the values with only the first releases
 

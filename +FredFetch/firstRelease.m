@@ -1,6 +1,6 @@
 function [returned] = firstRelease(series, varargin)
 
-  [opt, toPass] = fred.parseVarargin_({'parworkers', 'pseudo'}, varargin{:});
-  returned = fred.dispatch_(0, opt.parworkers, @fred.firstRelease_, series, toPass{:});
+  [opt, toPass] = FredFetch.parseVarargin_({'parworkers', 'pseudo'}, varargin{:});
+  returned = FredFetch.dispatch_(0, opt.parworkers, @FredFetch.firstRelease_, series, toPass{:});
 
 end

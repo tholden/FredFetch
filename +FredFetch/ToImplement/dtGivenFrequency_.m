@@ -10,17 +10,17 @@ function [dt] = dtGivenFrequency_(frequency, start, stop)
       dt    = dtall(find(weekday(dtall) == dow));
 
     case 'm'
-      dtY = fred.dtfld([start:stop]', 'year');
-      dtM = fred.dtfld([start:stop]', 'month');
+      dtY = FredFetch.dtfld([start:stop]', 'year');
+      dtM = FredFetch.dtfld([start:stop]', 'month');
       dt = unique(datenum(dtY, dtM, 1));
 
     case 'q'
-      dtY = fred.dtfld([start:stop]', 'year');
-      dtQ = fred.dtfld([start:stop]', 'quarter');
+      dtY = FredFetch.dtfld([start:stop]', 'year');
+      dtQ = FredFetch.dtfld([start:stop]', 'quarter');
       dt = unique(datenum(dtY, 3*dtQ-2, 1));
 
     case 'a'
-      dt = datenum(unique(fred.dtfld([start:stop]', 'year')), 1, 1);
+      dt = datenum(unique(FredFetch.dtfld([start:stop]', 'year')), 1, 1);
 
   end
 

@@ -3,10 +3,10 @@ function [calendar] = releaseCalendar(series, varargin)
   %% Parse options and fill in defaults if need be
 
     % Get some global options
-    optGlobal = fred.GlobalOptions();
+    optGlobal = FredFetch.GlobalOptions();
 
     % Parse input
-    opt = fred.parseVarargin_({'frequency', 'parworkers', 'realtime_start', 'realtime_end'}, varargin{:});
+    opt = FredFetch.parseVarargin_({'frequency', 'parworkers', 'realtime_start', 'realtime_end'}, varargin{:});
 
     % Fill in defaults if none given for start and end dates of calendar
     fill = {'realtime_start', 'realtime_end'};
@@ -19,7 +19,7 @@ function [calendar] = releaseCalendar(series, varargin)
 
       % Make sure it's in the right fred format form
       else
-        opt.(fld) = fred.dtstr(opt.(fld));
+        opt.(fld) = FredFetch.dtstr(opt.(fld));
       end
     end
     opt.api         = optGlobal.api;
@@ -39,9 +39,9 @@ function [calendar] = releaseCalendar(series, varargin)
                 '&file_type=json'],...
                 series, ...
                 opt.api);
-      toDispatch = @(series) fred.ReadFredURL_(infoURL(series), 1, opt.max_attempt);
+      toDispatch = @(series) FredFetch.ReadFredURL_(infoURL(series), 1, opt.max_attempt);
 
-      fromFred_frequencyInfo = fred.dispatch_(0, opt.parworkers, toDispatch, series);
+      fromFred_frequencyInfo = FredFetch.dispatch_(0, opt.parworkers, toDispatch, series);
       unpacked = [fromFred_frequencyInfo.seriess]';
       frequency = cellfun(@(s) s.frequency_short, unpacked, 'un', 0);
 
@@ -69,7 +69,7 @@ function [calendar] = releaseCalendar(series, varargin)
     fprintf('Matching series to Fred release code...')
 
     % Fetch the release IDs for the series given
-    fromFred_releaseIDs = fred.releaseID(series);
+    fromFred_releaseIDs = FredFetch.releaseID(series);
 
     % Extract the release IDs from Fred query results
     seriesReleaseIDs_all = [fromFred_releaseIDs.release_id]';
@@ -96,13 +96,13 @@ function [calendar] = releaseCalendar(series, varargin)
             opt.realtime_start, ...
             opt.realtime_end ...
             );
-    toDispatch = @(id) fred.ReadFredURL_(datesURL(id), 1, opt.max_attempt);
+    toDispatch = @(id) FredFetch.ReadFredURL_(datesURL(id), 1, opt.max_attempt);
 
     % Note: the "series" field will be the release number. That's just
     % an artifact of the way dispatch_ and multipleSeries_ was set up.
     % Will probably be changed in the future.
     fromFred_releaseDates = ...
-      fred.dispatch_(0, opt.parworkers, toDispatch, num2cell(seriesReleaseIDs_unique));
+      FredFetch.dispatch_(0, opt.parworkers, toDispatch, num2cell(seriesReleaseIDs_unique));
 
     fprintf('done\n')
 
@@ -118,7 +118,7 @@ function [calendar] = releaseCalendar(series, varargin)
     stacked = [fromFred_releaseDates.release_dates]';
 
     % Extract release dates and releaseIDs
-    releaseDates    = cellfun(@(s) fred.dtnum(s.date), stacked);
+    releaseDates    = cellfun(@(s) FredFetch.dtnum(s.date), stacked);
     releaseDatesIDs = cellfun(@(s) s.release_id, stacked);
 
     % Sort dates and ids by release dates

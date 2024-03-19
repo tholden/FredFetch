@@ -48,7 +48,7 @@ function [returned] = aggregate_(bob, X, dt, native, intended, method)
 
     % Take the given native frequency dates, and compute the
     % corresponding unique intended-frequency dates
-    allIntended = fred.dtGivenFrequency_(intended, dt(1), dt(end));
+    allIntended = FredFetch.dtGivenFrequency_(intended, dt(1), dt(end));
     Ntagg = length(allIntended);
 
     % Loop over columns and do one at a time

@@ -15,9 +15,9 @@ function [ release_dates ] = ...
   for s = 1:length(series)
     from_fred = loadjson(urlread(url(series{s})));
 
-    obs_dates     = cellfun(@(obs) datenum(obs.date), from_fred.observations)';
+    obs_dates     = cellfun(@(obs) datenum(obs.date), from_FredFetch.observations)';
     obs_dates     = arrayfun(@(dt) addtodate(dt, 2, 'month'), obs_dates); % Add 2 months so the obs dates is the first day of the last month in the quarter
-    release_dates = cellfun(@(obs) datenum(obs.realtime_start), from_fred.observations)';
+    release_dates = cellfun(@(obs) datenum(obs.realtime_start), from_FredFetch.observations)';
 
     if nargin > 5
       saving = varargin{1};
