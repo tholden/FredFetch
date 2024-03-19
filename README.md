@@ -8,19 +8,6 @@ This package aims to be simple enough for importing data quickly and
 interactively, while still having enough muscle to download many series
 over many vintage dates.
 
-## Table of Contents
-
-1. [Setup](#setup)
-2. [Basic Usage](#basic)
-  - [Fetching the Latest Data](#latest)
-  - [Fetching Vintage Data](#vintage)
-    - [Basic Examples](#vintexamples)
-    - [Pseudo-Vintages](#pseudo)
-    - [Parallel Calls](#parallel)
-3. [Additional Features](#features)
-4. [FredFetch as a Fred API Wrapper](#wrapper)
-
-<a name="setup"/>
 ## Setup
 
 Three steps:
@@ -32,7 +19,6 @@ Three steps:
 </ol>
 
 
-<a name="basic"/>
 ## Basic Usage
 
 You really only need to interact with two functions:
@@ -61,7 +47,6 @@ percent changes, or differences). If you need to transform the data, see
 the function `fred.transform`.
 
 
-<a name="latest"/>
 ### Fetching the Latest Data
 
 This is the simplest case, when you want to quickly import into Matlab
@@ -83,10 +68,8 @@ the Fred API need to be parsed, which is slower. Not terribly slow, but
 preferred.
 
 
-<a name="vintage"/>
 ### Fetching Vintage Data
 
-<a name="vintexamples"/>
 #### Basic Examples
 
 To fetch the data that would have existed at a certain date, run
@@ -110,7 +93,6 @@ correspond to different observation dates, while columns represent
 Should be clear from the function call and sizes of the returned
 information.
 
-<a name="pseudo"/>
 #### Pseudo-Vintages
 
 Most series do not have vintage data available at any arbitrary date.
@@ -134,7 +116,6 @@ This package will do exactly the method described above, using the
 median publication delay (computed over the entire available history of
 the series) to discard observations.
 
-<a name="parallel"/>
 #### Parallel Calls
 
 When downloading vintages for many, many series, you might want to
@@ -157,7 +138,6 @@ key and value before or after. But any additional arguements that should
 be handed to the Fred API (like `observation_start` and it's value)
 should come last in the argument list.
 
-<a name="features"/>
 ## Additional Features
 
 Here are some examples for the remaining user-oriented functions:
@@ -182,7 +162,6 @@ underscore, like `latest_.m`.  Often, the user-oriented functions are
 just wrappers that parse the user's input and then call these underscore
 functions. You don't ever really need to worry about them.
 
-<a name="wrapper"/>
 ## FredFetch as a Fred API Wrapper
 
 All of the above vintage functions accept additional arguments that can
